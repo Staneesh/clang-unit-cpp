@@ -55,31 +55,40 @@ public:
 };
 
 // auto FunctionTemplateMatcher = functionTemplateDecl(isExpansionInMainFile()).bind("functionTemplate");
-auto FunctionTemplateMatcher = functionDecl(hasParent(functionTemplateDecl(isExpansionInMainFile()))).bind("functionTemplate");
+// auto FunctionTemplateMatcher = functionTemplateDecl(isExpansionInMainFile(), hasDescendant(functionDecl())).bind("functionTemplate");
+auto FunctionTemplateMatcher = functionTemplateDecl(isExpansionInMainFile()).bind("functionTemplate");
 
 class FunctionTemplatePrinter : public MatchFinder::MatchCallback
 {
 public:
   virtual void run(const MatchFinder::MatchResult &Result) override
   {
-    if (const FunctionTemplateDecl *FS = Result.Nodes.getNodeAs<clang::FunctionTemplateDecl>("functionTemplate"))
-      FS->dump();
+    if (const FunctionTemplateDecl *FTD = Result.Nodes.getNodeAs<clang::FunctionTemplateDecl>("functionTemplate"))
+    {
+      llvm::outs() << "FTD name from clang:" << FTD->getNameAsString() << "\n";
+    }
   }
 };
 
-/*
-auto FunctionMatcher = functionDecl(isExpansionInMainFile()).bind("function");
+auto TemplateFunctionMatcher = functionDecl(isExpansionInMainFile(), isTemplateInstantiation()).bind("templateFunction");
 
-class FunctionPrinter : public MatchFinder::MatchCallback
+class TemplateFunctionPrinter : public MatchFinder::MatchCallback
 {
 public:
   virtual void run(const MatchFinder::MatchResult &Result) override
   {
-    if (const FunctionDecl *FS = Result.Nodes.getNodeAs<clang::FunctionDecl>("function"))
-      FS->dump();
+    if (const FunctionDecl *TF = Result.Nodes.getNodeAs<clang::FunctionDecl>("templateFunction"))
+    {
+      llvm::outs() << "TF name from clang:" << TF->getNameAsString() << "\n";
+      llvm::outs() << "TF return type from clang:" << TF->getReturnType().getAsString() << "\n";
+      llvm::outs() << "TF template specialization arg type from clang:" << TF->getTemplateSpecializationArgs()->get(0).getAsType().getAsString() << "\n";
+      for (auto &&p : TF->parameters())
+      {
+        llvm::outs() << "TF parameter type: " << p->getType().getAsString() << "\n";
+      }
+    }
   }
 };
-*/
 
 // Apply a custom category to all command-line options so that they are the
 // only ones displayed.
@@ -111,10 +120,8 @@ int main(int argc, const char **argv)
   Finder.addMatcher(LoopMatcher, &Printer);
   FunctionTemplatePrinter FunctionTemplatePrinter;
   Finder.addMatcher(FunctionTemplateMatcher, &FunctionTemplatePrinter);
-  /*
-  FunctionPrinter FunctionPrinter;
-  Finder.addMatcher(FunctionMatcher, &FunctionPrinter);
-  */
+  TemplateFunctionPrinter TemplateFunctionPrinter;
+  Finder.addMatcher(TemplateFunctionMatcher, &TemplateFunctionPrinter);
 
   return Tool.run(newFrontendActionFactory(&Finder).get());
 }
