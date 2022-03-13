@@ -1,1 +1,1 @@
-../../build/bin/loop-convert test.cpp --
+../../build/bin/loop-convert  test.cpp -- -std=c++20

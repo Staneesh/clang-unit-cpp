@@ -105,6 +105,7 @@ static cl::extrahelp MoreHelp("\nMore help text...\n");
 int main(int argc, const char **argv)
 {
   auto ExpectedParser = CommonOptionsParser::create(argc, argv, MyToolCategory);
+
   if (!ExpectedParser)
   {
     // Fail gracefully for unsupported options.
@@ -112,6 +113,7 @@ int main(int argc, const char **argv)
     return 1;
   }
   CommonOptionsParser &OptionsParser = ExpectedParser.get();
+
   ClangTool Tool(OptionsParser.getCompilations(),
                  OptionsParser.getSourcePathList());
 

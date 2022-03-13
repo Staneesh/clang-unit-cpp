@@ -41,6 +41,11 @@ T two_times(T x)
     return x + x;
 }
 
+auto two_times2(auto x)
+{
+    return x + x;
+}
+
 int foo(int a, int b)
 {
     return a + b;
@@ -55,5 +60,6 @@ int main()
     }
 
     std::cout << two_times(4.3) << " " << two_times(3) << std::endl;
+    std::cout << two_times2(4.3) << " " << two_times2(3) << std::endl;
     return 0;
 }
