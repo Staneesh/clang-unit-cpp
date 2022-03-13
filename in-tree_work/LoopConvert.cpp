@@ -37,7 +37,7 @@ class LoopPrinter : public MatchFinder::MatchCallback
   }
 
 public:
-  void run(const MatchFinder::MatchResult &Result)
+  void run(const MatchFinder::MatchResult &Result) override
   {
     ASTContext *Context = Result.Context;
     const ForStmt *FS = Result.Nodes.getNodeAs<ForStmt>("forLoop");
@@ -53,6 +53,34 @@ public:
     llvm::outs() << "Potential array-based loop discovered.\n";
   }
 };
+
+// auto FunctionTemplateMatcher = functionTemplateDecl(isExpansionInMainFile()).bind("functionTemplate");
+auto FunctionTemplateMatcher = functionDecl(hasParent(functionTemplateDecl(isExpansionInMainFile()))).bind("functionTemplate");
+
+class FunctionTemplatePrinter : public MatchFinder::MatchCallback
+{
+public:
+  virtual void run(const MatchFinder::MatchResult &Result) override
+  {
+    if (const FunctionTemplateDecl *FS = Result.Nodes.getNodeAs<clang::FunctionTemplateDecl>("functionTemplate"))
+      FS->dump();
+  }
+};
+
+/*
+auto FunctionMatcher = functionDecl(isExpansionInMainFile()).bind("function");
+
+class FunctionPrinter : public MatchFinder::MatchCallback
+{
+public:
+  virtual void run(const MatchFinder::MatchResult &Result) override
+  {
+    if (const FunctionDecl *FS = Result.Nodes.getNodeAs<clang::FunctionDecl>("function"))
+      FS->dump();
+  }
+};
+*/
+
 // Apply a custom category to all command-line options so that they are the
 // only ones displayed.
 static llvm::cl::OptionCategory MyToolCategory("my-tool options");
@@ -81,6 +109,12 @@ int main(int argc, const char **argv)
   LoopPrinter Printer;
   MatchFinder Finder;
   Finder.addMatcher(LoopMatcher, &Printer);
+  FunctionTemplatePrinter FunctionTemplatePrinter;
+  Finder.addMatcher(FunctionTemplateMatcher, &FunctionTemplatePrinter);
+  /*
+  FunctionPrinter FunctionPrinter;
+  Finder.addMatcher(FunctionMatcher, &FunctionPrinter);
+  */
 
   return Tool.run(newFrontendActionFactory(&Finder).get());
 }

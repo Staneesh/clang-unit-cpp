@@ -35,6 +35,17 @@ int foo(int n)
     return res;
 }
 
+template <typename T>
+T two_times(T x)
+{
+    return x + x;
+}
+
+int foo(int a, int b)
+{
+    return a + b;
+}
+
 int main()
 {
     std::cout << foo(5) << std::endl;
@@ -42,5 +53,7 @@ int main()
     {
         std::cout << i << std::endl;
     }
+
+    std::cout << two_times(4.3) << " " << two_times(3) << std::endl;
     return 0;
 }
