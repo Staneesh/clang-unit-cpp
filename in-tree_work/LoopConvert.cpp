@@ -146,7 +146,7 @@ std::string method_unit_test_stub_body(const CXXMethodDecl *C)
 {
   std::string result;
 
-  llvm::outs() << C->getNameAsString() << " - " << C->getParent()->getNameAsString() << "\n";
+  // llvm::outs() << C->getNameAsString() << " - " << C->getParent()->getNameAsString() << "\n";
   if (C->getNameAsString().compare(C->getParent()->getNameAsString()) == 0)
   {
     // I am a constructor
@@ -158,11 +158,11 @@ std::string method_unit_test_stub_body(const CXXMethodDecl *C)
   }
   else if (C->getReturnType().getAsString().compare("void") != 0)
   {
-    result = "\t" + C->getParent()->getNameAsString() + " object;\n\tEXPECT_EQ(object." + raw_method_call(C) + ", /* Fill Me! */);\n";
+    result = "\t" + C->getParent()->getQualifiedNameAsString() + " object;\n\tEXPECT_EQ(object." + raw_method_call(C) + ", /* Fill Me! */);\n";
   }
   else
   {
-    result = "\t" + C->getParent()->getNameAsString() + " object;\n\tobject." + raw_method_call(C) + "\n\t/* Fill Me! */\n";
+    result = "\t" + C->getParent()->getQualifiedNameAsString() + " object;\n\tobject." + raw_method_call(C) + "\n\t/* Fill Me! */\n";
   }
   return result;
 }
@@ -189,6 +189,7 @@ public:
       {
         llvm::outs() << "C parameter type: " << p->getType().getAsString() << "\n";
       }
+      llvm::outs() << C->getParent()->getQualifiedNameAsString() << "\n";
       llvm::outs() << "--------------\n";
 
       if (true)
