@@ -150,6 +150,14 @@ std::string comma_separated_argument_values(const CXXMethodDecl *C)
     {
       result += std::to_string(-10) + ", ";
     }
+    else if (arg_type_str.find("long") != std::string::npos)
+    {
+      result += std::to_string(-100) + ", ";
+    }
+    else if (arg_type_str.find("unsigned long") != std::string::npos)
+    {
+      result += std::to_string(100) + ", ";
+    }
     else if (arg_type_str.find("char") != std::string::npos)
     {
       result += std::string("\'a\'") + ", ";
@@ -158,13 +166,9 @@ std::string comma_separated_argument_values(const CXXMethodDecl *C)
     {
       result += std::string("test_string") + ", ";
     }
-    else if (arg_type_str.find("bool") != std::string::npos)
+    else if (arg_type_str.find("_Bool") != std::string::npos)
     {
       result += std::to_string(false) + ", ";
-    }
-    else if (arg_type_str.find("std::string") != std::string::npos)
-    {
-      result += std::string("test_string") + ", ";
     }
     else if (arg_type_str.find("void") != std::string::npos)
     {
