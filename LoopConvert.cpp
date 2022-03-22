@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <string>
 
 // Declares clang::SyntaxOnlyAction.
 #include "clang/Frontend/FrontendActions.h"
@@ -130,6 +131,62 @@ std::string comma_separated_arguments(const CXXMethodDecl *C)
   return result;
 }
 
+std::string comma_separated_argument_values(const CXXMethodDecl *C)
+{
+  std::string result;
+  for (auto &&arg : C->getAsFunction()->parameters())
+  {
+    auto arg_type_str = arg->getType().getAsString();
+    // stanim: C++ does not allow to switch over strings... wow.
+    if (arg_type_str.find("*") != std::string::npos) // am i a pointer?
+    {
+      result += arg_type_str + ", ";
+    }
+    else if (arg_type_str.find("unsigned int") != std::string::npos)
+    {
+      result += std::to_string(10) + ", ";
+    }
+    else if (arg_type_str.find("int") != std::string::npos)
+    {
+      result += std::to_string(-10) + ", ";
+    }
+    else if (arg_type_str.find("char") != std::string::npos)
+    {
+      result += std::string("\'a\'") + ", ";
+    }
+    else if (arg_type_str.find("std::string") != std::string::npos)
+    {
+      result += std::string("test_string") + ", ";
+    }
+    else if (arg_type_str.find("bool") != std::string::npos)
+    {
+      result += std::to_string(false) + ", ";
+    }
+    else if (arg_type_str.find("std::string") != std::string::npos)
+    {
+      result += std::string("test_string") + ", ";
+    }
+    else if (arg_type_str.find("void") != std::string::npos)
+    {
+      result += std::string("void") + ", ";
+    }
+    else if (arg_type_str.find("float") != std::string::npos)
+    {
+      result += std::to_string(-3.14) + ", ";
+    }
+    else if (arg_type_str.find("double") != std::string::npos)
+    {
+      result += std::to_string(-3.1415) + ", ";
+    }
+  }
+
+  if (result.size() > 2)
+  {
+    result = result.substr(0, result.size() - 2);
+  }
+  return result;
+}
+
 std::string raw_method_call(const CXXMethodDecl *C)
 {
   std::string result = C->getNameAsString() + "(" + comma_separated_arguments(C) + ")";
@@ -146,11 +203,19 @@ std::string method_unit_test_stub_body(const CXXMethodDecl *C)
 {
   std::string result;
 
-  // llvm::outs() << C->getNameAsString() << " - " << C->getParent()->getNameAsString() << "\n";
+  // llvm::outs() << "SEEING: " << C->getNameAsString() << " - " << C->getParent()->getNameAsString() << "\n";
+
   if (C->getNameAsString().compare(C->getParent()->getNameAsString()) == 0)
   {
     // I am a constructor
     result = "\t" + C->getQualifiedNameAsString() + " object" + raw_method_call(C) + ";\n\t/* Fill Me! */\n";
+    for (auto &&decl : C->decls())
+    {
+
+      llvm::outs() << "DUMPING CTOR DECL:\n";
+      decl->dump();
+      llvm::outs() << "Finished DUMPING CTOR DECL:\n";
+    }
   }
   else if (C->getNameAsString().compare("~" + C->getParent()->getNameAsString()) == 0)
   {
