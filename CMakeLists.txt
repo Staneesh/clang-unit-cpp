@@ -1,7 +1,9 @@
 set(LLVM_LINK_COMPONENTS support)
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-add_clang_executable(loop-convert LoopConvert.cpp)
-target_link_libraries(loop-convert
+add_clang_executable(clang-unit src/main.cpp src/ClangUnit.cpp)
+target_link_libraries(clang-unit
 	PRIVATE
 	clangAST
 	clangASTMatchers
@@ -10,3 +12,5 @@ target_link_libraries(loop-convert
 	clangSerialization
 	clangTooling
 )
+
+target_compile_options(clang-unit PUBLIC -Wno-deprecated-enum-enum-conversion)
