@@ -12,7 +12,8 @@
 #include "clang/ASTMatchers/ASTMatchFinder.h"
 #include "clang/AST/ASTContext.h"
 
-#include "ClangUnit.h"
+#include "ClangUnit.hpp"
+#include "ClangUnitChild.hpp"
 
 using namespace clang::tooling;
 using namespace llvm;
@@ -355,15 +356,16 @@ int addsome(int v)
 
 int main(int argc, const char **argv)
 {
-  auto cunit_optional = ClangUnit::init(argc, argv);
-  if (!cunit_optional.has_value())
+  ClangUnitChild cunitc(argc, argv);
+  bool cunitc_run_result = cunitc.run();
+
+  if (!cunitc_run_result)
   {
-    llvm::errs() << "Failed initializing ClangUnit!\n";
+    llvm::errs() << "Failure in ClangUnit.run()!\n";
     return 1;
   }
 
-  // stanisz: cunit points to the same memory as *cunit_optional.
-  ClangUnit cunit = std::move(*cunit_optional);
+  ClangUnit cunit(argc, argv);
   bool cunit_run_result = cunit.run();
 
   if (!cunit_run_result)

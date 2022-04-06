@@ -1,3 +1,2 @@
-#include <gtest/gtest.h> //clang-unit-cpp: Required for running tests
-#include "test/testcopy.cpp" //clang-unit-cpp: Includes the tested file
-
+#include <gtest/gtest.h> //clang-unit: System library
+#include "test/testcopy.cpp" //clang-unit: User library

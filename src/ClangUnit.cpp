@@ -1,10 +1,23 @@
-#include "ClangUnit.h"
+#include "ClangUnit.hpp"
 #include <fstream>
 #include <filesystem>
 #include <algorithm>
 
 std::shared_ptr<llvm::cl::OptionCategory> ClangUnit::option_category = std::make_shared<llvm::cl::OptionCategory>("ClangUnit options");
 // std::unique_ptr<clang::tooling::CommonOptionsParser> ClangUnit::options_parser = nullptr; // std::make_shared<clang::tooling::CommonOptionsParser>();
+
+ClangUnit::ClangUnit(int argc, const char **argv)
+{
+    auto ExpectedParser = clang::tooling::CommonOptionsParser::create(argc, argv, *ClangUnit::option_category);
+    if (!ExpectedParser)
+    {
+        // Fail gracefully for unsupported options.
+        llvm::errs() << ExpectedParser.takeError();
+        exit(1);
+    }
+    auto op = &ExpectedParser.get();
+    this->source_input_paths = op->getSourcePathList();
+}
 
 /*
 std::optional<clang::tooling::CommonOptionsParser> ClangUnit::get_options_parser(int argc, const char **argv)
@@ -22,6 +35,7 @@ std::optional<clang::tooling::CommonOptionsParser> ClangUnit::get_options_parser
     return OptionsParser;
 }
 */
+/*
 std::optional<ClangUnit> ClangUnit::init(int argc, const char **argv)
 {
     auto ExpectedParser = clang::tooling::CommonOptionsParser::create(argc, argv, *ClangUnit::option_category);
@@ -34,13 +48,15 @@ std::optional<ClangUnit> ClangUnit::init(int argc, const char **argv)
 
     return ClangUnit(ExpectedParser.get());
 }
-
+*/
+/*
 ClangUnit::ClangUnit(clang::tooling::CommonOptionsParser &op)
 {
     // this->tool = std::make_shared<clang::tooling::ClangTool>(op.getCompilations(),
     //                                                          op.getSourcePathList());
     this->source_input_paths = op.getSourcePathList();
 }
+*/
 
 std::string ClangUnit::to_output_source_path(std::string &input_source_path)
 {
@@ -91,8 +107,7 @@ void ClangUnit::generate_unit_test_file_preludes()
     }
     for (auto &&source_input_path : this->source_input_paths)
     {
-        std::string result = "#include <gtest/gtest.h> //clang-unit-cpp: Required for running tests\n";
-        result += "#include \"" + source_input_path + "\" //clang-unit-cpp: Includes the tested file\n\n";
+        std::string result = this->get_includes(source_input_path);
         this->write_to_file(result, this->output_files[this->to_output_source_path(source_input_path)]);
     }
 }
