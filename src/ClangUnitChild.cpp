@@ -1,8 +1,7 @@
 #include "ClangUnitChild.hpp"
+#include <filesystem>
 
-std::string ClangUnitChild::get_includes(std::string &source_input_path) const
+std::string ClangUnitChild::to_output_source_path(std::string &input_source_path) const
 {
-    std::vector<std::string> system = {"gtestlksjdfhslkjdfd/gtest.h"};
-    std::vector<std::string> user = {source_input_path};
-    return includes_string(system, user);
+    return std::filesystem::path(input_source_path).replace_filename(std::string("cunitchild_") + std::filesystem::path(input_source_path).filename().string());
 }

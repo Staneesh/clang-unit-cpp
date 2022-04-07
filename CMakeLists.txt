@@ -2,7 +2,13 @@ set(LLVM_LINK_COMPONENTS support)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-add_clang_executable(clang-unit src/main.cpp src/ClangUnit.cpp src/ClangUnitChild.cpp src/interfaces/GeneratesIncludes.cpp)
+add_clang_executable(clang-unit 
+	src/main.cpp 
+	src/ClangUnit.cpp 
+	src/ClangUnitChild.cpp 
+	src/interfaces/GeneratesIncludes.cpp
+	src/interfaces/HandlesOutputFiles.cpp
+)
 target_link_libraries(clang-unit
 	PRIVATE
 	clangAST
