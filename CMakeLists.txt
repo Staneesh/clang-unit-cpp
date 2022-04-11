@@ -8,6 +8,13 @@ add_clang_executable(clang-unit
 	src/ClangUnitChild.cpp 
 	src/interfaces/GeneratesIncludes.cpp
 	src/interfaces/HandlesOutputFiles.cpp
+	src/interfaces/Printable.cpp
+	src/InputParser.cpp
+	src/ParsedMethod.cpp
+	src/FunctionalParameter.cpp
+	src/TestCase.cpp
+	src/TestCasesForParsedInput.cpp
+	src/TestsWriter.cpp
 )
 target_link_libraries(clang-unit
 	PRIVATE

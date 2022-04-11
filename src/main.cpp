@@ -14,6 +14,7 @@
 
 #include "ClangUnit.hpp"
 #include "ClangUnitChild.hpp"
+#include "InputParser.hpp"
 
 using namespace clang::tooling;
 using namespace llvm;
@@ -339,15 +340,15 @@ public:
 
 // Apply a custom category to all command-line options so that they are the
 // only ones displayed.
-static llvm::cl::OptionCategory MyToolCategory("my-tool options");
+// static llvm::cl::OptionCategory MyToolCategory("my-tool options");
 
 // CommonOptionsParser declares HelpMessage with a description of the common
 // command-line options related to the compilation database and input files.
 // It's nice to have this help message in all tools.
-static cl::extrahelp CommonHelp(CommonOptionsParser::HelpMessage);
+// static cl::extrahelp CommonHelp(CommonOptionsParser::HelpMessage);
 
 // A help message for this specific tool can be added afterwards.
-static cl::extrahelp MoreHelp("\nMore help text...\n");
+// static cl::extrahelp MoreHelp("\nMore help text...\n");
 
 int addsome(int v)
 {
@@ -356,6 +357,24 @@ int addsome(int v)
 
 int main(int argc, const char **argv)
 {
+  auto parse_opt = ClangUnitParser::parse(argc, argv);
+  if (parse_opt.has_value() == false)
+  {
+    llvm::errs() << "ERROR: ClangUnit::parse() failed! Exiting...\n";
+    exit(1);
+  }
+  auto parsed = std::move(parse_opt.value());
+
+  auto cunit = ClangUnit(parsed);
+  auto tests = cunit.generate_tests();
+  for (auto &&t : tests)
+  {
+    t.print();
+  }
+
+  return 0;
+
+  /*
   ClangUnitChild cunitc(argc, argv);
   bool cunitc_run_result = cunitc.run();
 
@@ -373,7 +392,7 @@ int main(int argc, const char **argv)
     llvm::errs() << "Failure in ClangUnit.run()!\n";
     return 1;
   }
-
+  */
   return 0;
 
   /*
@@ -385,7 +404,6 @@ int main(int argc, const char **argv)
     return 1;
   }
   CommonOptionsParser &OptionsParser = ExpectedParser.get();
-  */
 
   std::ofstream test_file("test/automatically_generated.cpp", std::ios::app);
   if (test_file.is_open())
@@ -395,10 +413,8 @@ int main(int argc, const char **argv)
     test_file.close();
   }
 
-  /*
   ClangTool Tool(OptionsParser.getCompilations(),
                  OptionsParser.getSourcePathList());
-  */
 
   MatchFinder Finder;
   /*
@@ -411,8 +427,10 @@ int main(int argc, const char **argv)
   FunctionPrinter FunctionPrinter;
   Finder.addMatcher(FunctionMatcher, &FunctionPrinter);
   */
+  /*
   MethodPrinter MethodPrinter;
   Finder.addMatcher(MethodMatcher, &MethodPrinter);
 
-  // return Tool.run(newFrontendActionFactory(&Finder).get());
+  return Tool.run(newFrontendActionFactory(&Finder).get());
+  */
 }
