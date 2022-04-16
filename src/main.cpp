@@ -15,6 +15,7 @@
 #include "ClangUnit.hpp"
 #include "ClangUnitChild.hpp"
 #include "InputParser.hpp"
+#include "TestsWriter.hpp"
 
 using namespace clang::tooling;
 using namespace llvm;
@@ -366,11 +367,16 @@ int main(int argc, const char **argv)
   auto parsed = std::move(parse_opt.value());
 
   auto cunit = ClangUnit(parsed);
-  auto tests = cunit.generate_tests();
-  for (auto &&t : tests)
+  auto tests_for_all_inputs = cunit.generate_tests();
+  for (auto &&t : tests_for_all_inputs)
   {
     t.print();
   }
+
+  // auto second_copy = tests_for_all_inputs;
+  // tests_for_all_inputs.insert(tests_for_all_inputs.end(), second_copy.begin(), second_copy.end());
+  TestsWriter twriter(tests_for_all_inputs);
+  twriter.write_all();
 
   return 0;
 

@@ -17,7 +17,7 @@ enable_testing()
 
 add_executable(
   test_executable
-  automatically_generated.cpp
+  cunit_test.cpp
 )
 target_link_libraries(
   test_executable

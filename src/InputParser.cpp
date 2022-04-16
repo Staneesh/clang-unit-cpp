@@ -26,7 +26,8 @@ public:
 
         if (const clang::CXXMethodDecl *C = Result.Nodes.getNodeAs<clang::CXXMethodDecl>("method"))
         {
-            if (C->isModulePrivate() == false)
+            llvm::outs() << "BLAHBLAH METHOD FIRST CHAR: " << C->getNameAsString().substr(0, 1) << "\n";
+            if (C->isModulePrivate() == false && C->isDeleted() == false && C->getNameAsString().substr(0, 1) != "~")
             {
                 // stanisz: Cannot test private methods, unless friend...?
                 auto filename = source_manager.getFilename(C->getLocation()).str();

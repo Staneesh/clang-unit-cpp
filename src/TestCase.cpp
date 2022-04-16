@@ -16,7 +16,7 @@ TestCase::TestCase(const std::string &test_suite_name, const std::string &test_c
 std::string TestCase::to_string() const
 {
     std::string result;
-    result += "TEST( " + this->test_suite_name + ", " + this->name + ")\n";
+    result += "TEST(" + this->test_suite_name + ", " + this->name + ")\n";
     result += "{\n";
     result += this->body + "\n";
     result += "}\n";
