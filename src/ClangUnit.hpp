@@ -20,11 +20,7 @@ private:
     // stanisz: Members
     const std::vector<ParsedInputSource> &parsed_input_sources; // stanisz: No ability to change parsed contents
     static unsigned STATIC_COUNTER;
-    // stanisz: This should be handled by the centralization writing mechanism.
-    // std::map<std::string, std::shared_ptr<std::ofstream>> output_files;
-    // std::vector<std::string> get_source_output_paths();
-    // void open_output_files();
-    // void generate_unit_test_file_preludes();
+
 protected:
     // stanisz: A single ClangUnit will be able to generate a single test suite. Seems logical.
     //          If I wanted to allow run-time changes, I would need to store more state in ClangUnit.

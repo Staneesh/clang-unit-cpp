@@ -10,16 +10,28 @@
 
 class ParsedMethod : protected Printable
 {
+public:
+    enum Kind
+    {
+        Constructor,
+        Destructor,
+        RegularMethod,
+    };
+
 private:
     std::string name;
     std::string return_type;
     std::vector<FunctionalParameter> parameters;
+    Kind kind;
+    std::string class_name;
 
 public:
     ParsedMethod(const clang::CXXMethodDecl *raw_method);
     std::string get_name() const;
     std::string get_return_type() const;
     std::vector<FunctionalParameter> get_parameters() const;
+    Kind get_kind() const;
+    std::string get_class_name() const;
     void set_name(const std::string &name);
     void set_name(const std::string &&name);
     void set_return_type(const std::string &return_type);

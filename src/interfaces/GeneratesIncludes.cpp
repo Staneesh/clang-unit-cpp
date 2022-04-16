@@ -24,7 +24,7 @@ std::string GeneratesIncludes::includes_string(std::vector<std::string> system_l
     {
         result += this->user_include(ul);
     }
-
+    result += "\n";
     return result;
 }
 

@@ -26,10 +26,12 @@ public:
 
         if (const clang::CXXMethodDecl *C = Result.Nodes.getNodeAs<clang::CXXMethodDecl>("method"))
         {
-            llvm::outs() << "BLAHBLAH METHOD FIRST CHAR: " << C->getNameAsString().substr(0, 1) << "\n";
-            if (C->isModulePrivate() == false && C->isDeleted() == false && C->getNameAsString().substr(0, 1) != "~")
+            if (C->isModulePrivate() == false // stanisz: Cannot test private methods, unless friend...?
+                && C->isDeleted() == false    // stanisz: Self explanatory
+                //&& C->getNameAsString().substr(0, 1) != "~"  // stanisz: Will not test destructors
+            )
             {
-                // stanisz: Cannot test private methods, unless friend...?
+
                 auto filename = source_manager.getFilename(C->getLocation()).str();
                 parsed_methods[filename].push_back(ParsedMethod(C));
             }

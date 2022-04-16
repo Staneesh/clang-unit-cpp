@@ -9,12 +9,14 @@ add_clang_executable(clang-unit
 	src/interfaces/GeneratesIncludes.cpp
 	src/interfaces/HandlesOutputFiles.cpp
 	src/interfaces/Printable.cpp
+	src/interfaces/TestsMethods.cpp
 	src/InputParser.cpp
 	src/ParsedMethod.cpp
 	src/FunctionalParameter.cpp
 	src/TestCase.cpp
 	src/TestCasesForParsedInput.cpp
 	src/TestsWriter.cpp
+	src/RandomValueByType.cpp
 )
 target_link_libraries(clang-unit
 	PRIVATE

@@ -8,6 +8,30 @@ ParsedMethod::ParsedMethod(const clang::CXXMethodDecl *raw_method)
     {
         this->parameters.push_back(FunctionalParameter(e));
     }
+
+    if (this->name.substr(0, 1) == "~")
+    {
+        this->kind = Kind::Destructor;
+    }
+    else if (this->name.compare(raw_method->getParent()->getNameAsString()) == 0)
+    {
+        this->kind = Kind::Constructor;
+    }
+    else
+    {
+        this->kind = Kind::RegularMethod;
+    }
+    this->class_name = raw_method->getParent()->getQualifiedNameAsString();
+}
+
+std::string ParsedMethod::get_class_name() const
+{
+    return this->class_name;
+}
+
+ParsedMethod::Kind ParsedMethod::get_kind() const
+{
+    return this->kind;
 }
 
 std::string ParsedMethod::get_name() const
