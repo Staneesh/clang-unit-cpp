@@ -45,3 +45,63 @@ double RandomValueByType::random_double()
 {
     return double((double)rand() / (double)RAND_MAX) * (-3);
 }
+
+std::string RandomValueByType::random_value_string(const std::string &type)
+{
+    std::string result = "";
+
+    if (type.find("*") != std::string::npos) // am i a pointer?
+    {
+        result += type;
+    }
+    else if (type.find("unsigned int") != std::string::npos)
+    {
+        result += std::to_string(std::abs(RandomValueByType::random_int()));
+    }
+    else if (type.find("int") != std::string::npos)
+    {
+        result += std::to_string(RandomValueByType::random_int());
+    }
+    else if (type.find("unsigned long") != std::string::npos)
+    {
+        result += std::to_string(std::abs(RandomValueByType::random_long()));
+    }
+    else if (type.find("long") != std::string::npos)
+    {
+        result += std::to_string(RandomValueByType::random_long());
+    }
+    else if (type.find("unsigned short") != std::string::npos)
+    {
+        result += std::to_string(std::abs(RandomValueByType::random_short()));
+    }
+    else if (type.find("short") != std::string::npos)
+    {
+        result += std::to_string(RandomValueByType::random_short());
+    }
+    else if (type.find("char") != std::string::npos)
+    {
+        result += std::string("\'") + RandomValueByType::random_char() + "\'";
+    }
+    else if (type.find("std::string") != std::string::npos)
+    {
+        result += std::string("std::string(\"") + RandomValueByType::random_string() + "\")";
+    }
+    else if (type.find("bool") != std::string::npos)
+    {
+        result += std::to_string(RandomValueByType::random_bool());
+    }
+    else if (type.find("float") != std::string::npos)
+    {
+        result += std::to_string(RandomValueByType::random_float());
+    }
+    else if (type.find("double") != std::string::npos)
+    {
+        result += std::to_string(RandomValueByType::random_double());
+    }
+    else // stanim: Not supported, have a stub here:
+    {
+        result += type;
+    }
+
+    return result;
+}

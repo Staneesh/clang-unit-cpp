@@ -2,17 +2,21 @@
 
 #include <string>
 
-namespace RandomValueByType
+class RandomValueByType
 {
-    int random_int();
-    long random_long();
-    short random_short();
+private:
+    static int random_int();
+    static long random_long();
+    static short random_short();
 
-    char random_char();
-    std::string random_string();
+    static char random_char();
+    static std::string random_string();
 
-    bool random_bool();
+    static bool random_bool();
 
-    float random_float();
-    double random_double();
-}
+    static float random_float();
+    static double random_double();
+
+public:
+    static std::string random_value_string(const std::string &type);
+};

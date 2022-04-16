@@ -22,73 +22,13 @@ const std::string ClangUnit::get_test_case_name(const ParsedMethod &parsed_metho
     return parsed_method.get_name() + "STUB_TEST" + std::to_string(STATIC_COUNTER++);
 }
 
-std::string random_value_string(const std::string &type)
-{
-    std::string result = "";
-
-    if (type.find("*") != std::string::npos) // am i a pointer?
-    {
-        result += type;
-    }
-    else if (type.find("unsigned int") != std::string::npos)
-    {
-        result += std::to_string(std::abs(RandomValueByType::random_int()));
-    }
-    else if (type.find("int") != std::string::npos)
-    {
-        result += std::to_string(RandomValueByType::random_int());
-    }
-    else if (type.find("unsigned long") != std::string::npos)
-    {
-        result += std::to_string(std::abs(RandomValueByType::random_long()));
-    }
-    else if (type.find("long") != std::string::npos)
-    {
-        result += std::to_string(RandomValueByType::random_long());
-    }
-    else if (type.find("unsigned short") != std::string::npos)
-    {
-        result += std::to_string(std::abs(RandomValueByType::random_short()));
-    }
-    else if (type.find("short") != std::string::npos)
-    {
-        result += std::to_string(RandomValueByType::random_short());
-    }
-    else if (type.find("char") != std::string::npos)
-    {
-        result += std::string("\'") + RandomValueByType::random_char() + "\'";
-    }
-    else if (type.find("std::string") != std::string::npos)
-    {
-        result += std::string("std::string(\"") + RandomValueByType::random_string() + "\")";
-    }
-    else if (type.find("bool") != std::string::npos)
-    {
-        result += std::to_string(RandomValueByType::random_bool());
-    }
-    else if (type.find("float") != std::string::npos)
-    {
-        result += std::to_string(RandomValueByType::random_float());
-    }
-    else if (type.find("double") != std::string::npos)
-    {
-        result += std::to_string(RandomValueByType::random_double());
-    }
-    else // stanim: Not supported, have a stub here:
-    {
-        result += type;
-    }
-
-    return result;
-}
-
 std::string arguments_list(const std::vector<FunctionalParameter> &params)
 {
     std::string result = "";
 
     for (auto &&param : params)
     {
-        result += "(" + param.get_type() + ")(" + random_value_string(param.get_type()) + "), ";
+        result += "(" + param.get_type() + ")(" + RandomValueByType::random_value_string(param.get_type()) + "), ";
     }
 
     result = result.substr(0, result.size() - 2); // stanisz: Skip last comma
