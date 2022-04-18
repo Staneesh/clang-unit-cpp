@@ -22,3 +22,24 @@ TEST(STUB_SUITE, return_structSTUB_TEST6)
 	ASSERT_EQ(result, /*Fill me!*/);
 
 }
+TEST(STUB_SUITE, get_lengthSTUB_TEST_CHILD11)
+{
+	Outer::Inner::NiceStruct instance;
+	unsigned int result = instance.get_length();
+	ASSERT_EQ(result, /*Fill me!*/);
+
+}
+TEST(STUB_SUITE, methodSTUB_TEST_CHILD12)
+{
+	StandaloneStruct instance;
+	instance.method((int)(-23058), (long long)(-9133069), (long)(-5898167), (short)(-393), (unsigned int)(18456), (float)(-0.877550), (double)(-2.314073), (float)(-1.580235), (bool)(1));
+	ASSERT_EQ(/*Fill me!*/, /*Fill me!*/);
+
+}
+TEST(STUB_SUITE, return_structSTUB_TEST_CHILD13)
+{
+	StandaloneStruct instance;
+	Outer::Inner::NiceStruct result = instance.return_struct((Outer::Inner::NiceStruct &)(Outer::Inner::NiceStruct &));
+	ASSERT_EQ(result, /*Fill me!*/);
+
+}

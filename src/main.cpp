@@ -15,10 +15,11 @@ int main(int argc, const char **argv)
 
   auto cunit = ClangUnit(parsed);
   auto tests_for_all_inputs = cunit.generate_tests();
-  for (auto &&t : tests_for_all_inputs)
-  {
-    t.print();
-  }
+
+  auto cunit_child = ClangUnitChild(parsed);
+  auto tests_produced_by_child = cunit_child.generate_tests();
+
+  tests_for_all_inputs.insert(tests_for_all_inputs.end(), tests_produced_by_child.begin(), tests_produced_by_child.end());
 
   TestsWriter twriter(tests_for_all_inputs);
   twriter.write_all();

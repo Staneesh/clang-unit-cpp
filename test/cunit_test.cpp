@@ -28,3 +28,29 @@ TEST(STUB_SUITE, free_functionSTUB_TEST3)
 	ASSERT_EQ(result, /*Fill me!*/);
 
 }
+TEST(STUB_SUITE, get_lengthSTUB_TEST_CHILD7)
+{
+	Outer::Inner::NiceStruct instance;
+	unsigned int result = instance.get_length();
+	ASSERT_EQ(result, /*Fill me!*/);
+
+}
+TEST(STUB_SUITE, methodSTUB_TEST_CHILD8)
+{
+	StandaloneStruct instance;
+	instance.method((int)(-5211), (long long)(-1595368), (long)(-4702567), (short)(-429), (unsigned int)(65782), (float)(-1.202833), (double)(-0.389371), (float)(-0.326426), (bool)(1));
+	ASSERT_EQ(/*Fill me!*/, /*Fill me!*/);
+
+}
+TEST(STUB_SUITE, return_structSTUB_TEST_CHILD9)
+{
+	StandaloneStruct instance;
+	Outer::Inner::NiceStruct result = instance.return_struct((Outer::Inner::NiceStruct &)(Outer::Inner::NiceStruct &));
+	ASSERT_EQ(result, /*Fill me!*/);
+
+}
+TEST(STUB_SUITE, free_functionSTUB_TEST_CHILD10)
+{
+	ASSERT_EQ(free_function((int)(-3135), (int)(-13929)), free_function((int)(-79802), (int)(-34022)));
+
+}
