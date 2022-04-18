@@ -4,7 +4,7 @@
 #include "interfaces/Printable.hpp"
 #include <vector>
 
-class TestCasesForParsedInput : protected Printable
+class TestCasesForParsedInput : protected virtual Printable
 {
 private:
     std::string input_source_path;

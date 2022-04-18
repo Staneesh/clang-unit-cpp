@@ -6,7 +6,7 @@
 #include <vector>
 #include "TestCasesForParsedInput.hpp"
 
-class TestsWriter : protected HandlesOutputFiles, protected GeneratesIncludes
+class TestsWriter : protected virtual HandlesOutputFiles, protected virtual GeneratesIncludes
 {
 private:
     std::vector<TestCasesForParsedInput> many_groups_of_test_cases;

@@ -3,7 +3,7 @@
 #include "clang/AST/DeclCXX.h"
 #include "interfaces/Printable.hpp"
 
-class FunctionalParameter : protected Printable
+class FunctionalParameter : protected virtual Printable
 {
 private:
     std::string type;

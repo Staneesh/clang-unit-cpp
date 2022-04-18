@@ -22,3 +22,28 @@ std::string TestCase::to_string() const
     result += "}\n";
     return result;
 }
+
+std::string TestCase::get_test_suite_name() const
+{
+    return this->test_suite_name;
+}
+std::string TestCase::get_test_case_name() const
+{
+    return this->name;
+}
+std::string TestCase::get_test_case_body() const
+{
+    return this->body;
+}
+void TestCase::set_test_suite_name(const std::string &o)
+{
+    this->test_suite_name = o;
+}
+void TestCase::set_test_case_name(const std::string &o)
+{
+    this->name = o;
+}
+void TestCase::set_test_case_body(const std::string &o)
+{
+    this->body = o;
+}
