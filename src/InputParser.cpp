@@ -6,6 +6,7 @@
 #include "clang/ASTMatchers/ASTMatchFinder.h"
 
 #include <map>
+#include <set>
 #include <memory>
 
 class MethodPrinter : public clang::ast_matchers::MatchFinder::MatchCallback
@@ -28,7 +29,6 @@ public:
         {
             if (C->isModulePrivate() == false // stanisz: Cannot test private methods, unless friend...?
                 && C->isDeleted() == false    // stanisz: Self explanatory
-                //&& C->getNameAsString().substr(0, 1) != "~"  // stanisz: Will not test destructors
             )
             {
 
@@ -57,8 +57,7 @@ public:
 
         if (const clang::FunctionDecl *F = Result.Nodes.getNodeAs<clang::FunctionDecl>("function"))
         {
-            if (true // stanisz: No special restrictions for now
-            )
+            if (F->isCXXClassMember() == false)
             {
                 auto filename = source_manager.getFilename(F->getLocation()).str();
                 parsed_functions[filename].push_back(ParsedFunction(F));
@@ -75,6 +74,11 @@ std::string ParsedInputSource::get_path() const
 std::vector<ParsedMethod> ParsedInputSource::get_methods() const
 {
     return this->methods;
+}
+
+std::vector<ParsedFunction> ParsedInputSource::get_functions() const
+{
+    return this->functions;
 }
 
 std::optional<std::vector<ParsedInputSource>> ClangUnitParser::parse(int argc, const char **argv)
@@ -116,15 +120,15 @@ std::optional<std::vector<ParsedInputSource>> ClangUnitParser::parse(int argc, c
     auto methods = MethodPrinter.get_parsed_methods();
     auto functions = FunctionPrinter.get_parsed_functions();
 
-    std::vector<std::string> paths;
+    std::set<std::string> paths;
 
     for (auto &&e : methods)
     {
-        paths.push_back(e.first);
+        paths.insert(e.first);
     }
     for (auto &&e : functions)
     {
-        paths.push_back(e.first);
+        paths.insert(e.first);
     }
 
     for (auto &&p : paths)

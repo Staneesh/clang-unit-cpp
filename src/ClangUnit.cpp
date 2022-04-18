@@ -32,6 +32,15 @@ const TestCase ClangUnit::generate_test_for_method(const ParsedMethod &parsed_me
     return TestCase(suite_name, test_name, body);
 }
 
+const TestCase ClangUnit::generate_test_for_function(const ParsedFunction &parsed_function) const
+{
+    std::string suite_name = this->get_test_suite_name();
+    std::string test_name = this->get_function_test_case_name(parsed_function);
+    std::string body = this->get_function_test_case_body(parsed_function);
+
+    return TestCase(suite_name, test_name, body);
+}
+
 const TestCasesForParsedInput ClangUnit::prepared_test_cases(const TestCasesForParsedInput &tcases) const
 {
     std::vector<TestCase> new_cases;

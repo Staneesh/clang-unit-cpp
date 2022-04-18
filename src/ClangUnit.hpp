@@ -8,6 +8,7 @@
 #include "interfaces/GeneratesIncludes.hpp"
 #include "interfaces/HandlesOutputFiles.hpp"
 #include "interfaces/TestsMethods.hpp"
+#include "interfaces/TestsFunctions.hpp"
 
 #include "InputParser.hpp"
 #include "TestCasesForParsedInput.hpp"
@@ -15,7 +16,7 @@
 // stanisz: This class should be about constructing Tests (and possibly suites) based
 //          on the parsed input sources. The centralization mechanism will then
 //          aggregate all this and write to proper files.
-class ClangUnit : protected virtual TestsMethods
+class ClangUnit : protected virtual TestsMethods, protected virtual TestsFunctions
 {
 private:
     // stanisz: Members

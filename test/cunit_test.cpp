@@ -22,3 +22,9 @@ TEST(STUB_SUITE, return_structSTUB_TEST2)
 	ASSERT_EQ(result, /*Fill me!*/);
 
 }
+TEST(STUB_SUITE, free_functionSTUB_TEST3)
+{
+	int result = free_function((int)(-41421), (int)(-2362));
+	ASSERT_EQ(result, /*Fill me!*/);
+
+}

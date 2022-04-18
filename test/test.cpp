@@ -42,3 +42,8 @@ struct StandaloneStruct
         return pass;
     }
 };
+
+int free_function(int a, int b)
+{
+    return a + b;
+}

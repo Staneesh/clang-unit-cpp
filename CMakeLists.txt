@@ -10,6 +10,7 @@ add_clang_executable(clang-unit
 	src/interfaces/HandlesOutputFiles.cpp
 	src/interfaces/Printable.cpp
 	src/interfaces/TestsMethods.cpp
+	src/interfaces/TestsFunctions.cpp
 	src/interfaces/SharedGenericTestGen.cpp
 	src/InputParser.cpp
 	src/ParsedMethod.cpp

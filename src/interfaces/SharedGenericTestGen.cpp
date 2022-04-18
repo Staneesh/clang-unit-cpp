@@ -16,11 +16,20 @@ std::string arguments_list(const std::vector<FunctionalParameter> &params)
     return result;
 }
 
-std::string function_call(const ParsedMethod &parsed_method)
+std::string method_call(const ParsedMethod &parsed_method)
 {
     std::string result = "";
 
     result += parsed_method.get_name() + "(" + arguments_list(parsed_method.get_parameters()) + ")";
+
+    return result;
+}
+
+std::string function_call(const ParsedFunction &parsed_function)
+{
+    std::string result = "";
+
+    result += parsed_function.get_name() + "(" + arguments_list(parsed_function.get_parameters()) + ")";
 
     return result;
 }
