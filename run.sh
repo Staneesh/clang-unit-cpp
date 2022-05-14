@@ -1,1 +1,1 @@
-../../build/bin/clang-unit  test/test.cpp  test/testcopy.cpp -- -std=c++20
+../../build/bin/clang-unit  test/test.cpp -- -std=c++20

@@ -1,14 +1,14 @@
 #pragma once
 #include "ClangUnit.hpp"
 
-class ClangUnitChild : public ClangUnit
+class ClangUnitCtor : public ClangUnit
 {
 public:
-    ClangUnitChild(
+    ClangUnitCtor(
         const std::vector<ParsedInputSource> &parsed_inputs)
         : ClangUnit(parsed_inputs)
     {
-        this->set_test_suite_name("SetterTesting");
+        this->set_test_suite_name("ConstructorTesting");
     };
 
     virtual const std::string

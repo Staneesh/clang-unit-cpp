@@ -1,9 +1,10 @@
-struct StandaloneStruct
+class Object
 {
-    void method(int a, long long b, long c, short d, unsigned e, float f, double g, float i, bool h){};
-};
+    int name;
+    int age;
 
-int free_function(int a, int b)
-{
-    return a + b;
-}
+public:
+    Object(){};
+    Object(int name_pass, int age_pass)
+        : name(name_pass), age(age_pass){};
+};

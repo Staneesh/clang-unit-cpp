@@ -1,49 +1,17 @@
-#include <iostream>
-#include <vector>
-
-namespace Outer
+class Square
 {
-    ////////////////////////////////////////////////////////////////////////////
-    //                                 LineReader                             //
-    ////////////////////////////////////////////////////////////////////////////
+    float side;
+    float area;
 
-    namespace Inner
+public:
+    Square() = default;
+    Square(float side) { this->setSide(side); }
+
+    void setSide(float newSide)
     {
-        struct NiceStruct
-        {
-            std::string member1;
-
-            NiceStruct()
-            {
-                member1 = std::string("Hello!");
-            }
-            NiceStruct(std::string &pass)
-            {
-                member1 = pass;
-            }
-            ~NiceStruct()
-            {
-                std::cout << "Dying!" << std::endl;
-            }
-
-            unsigned get_length()
-            {
-                return member1.length();
-            }
-        };
+        this->side = newSide;
+        this->area = this->side * this->side;
     }
-}
-
-struct StandaloneStruct
-{
-    void method(int a, long long b, long c, short d, unsigned e, float f, double g, float i, bool h) {}
-    Outer::Inner::NiceStruct return_struct(Outer::Inner::NiceStruct &pass)
-    {
-        return pass;
-    }
+    float getArea() const { return this->area; }
+    float getSide() const { return this->side; }
 };
-
-int free_function(int a, int b)
-{
-    return a + b;
-}

@@ -12,13 +12,13 @@ const std::string TestsFunctions::get_function_test_case_body(const ParsedFuncti
     std::string result = "";
     if (parsed_function.get_return_type() != "void")
     {
-        result += "\t" + parsed_function.get_return_type() + " result = " + function_call(parsed_function) + ";\n";
-        result += "\tASSERT_EQ(result, /*Fill me!*/);\n";
+        result += tabbing() + parsed_function.get_return_type() + " result = " + function_call(parsed_function) + end_of_line();
+        result += tabbing() + assert_eq("result", fill_me());
     }
     else
     {
-        result += function_call(parsed_function) + ";\n";
-        result += "\tASSERT_EQ(/*Fill me!*/, /*Fill me!*/);\n";
+        result += function_call(parsed_function) + end_of_line();
+        result += tabbing() + assert_eq(fill_me(), fill_me());
     }
 
     return result;

@@ -17,7 +17,7 @@ short RandomValueByType::random_short()
 
 char RandomValueByType::random_char()
 {
-    return char(rand() % 255);
+    return char(32 + rand() % 94);
 }
 
 std::string RandomValueByType::random_string()

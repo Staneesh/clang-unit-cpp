@@ -8,17 +8,24 @@
 #include <map>
 #include <set>
 #include <memory>
+#include <iostream>
 
 class MethodPrinter : public clang::ast_matchers::MatchFinder::MatchCallback
 {
     // stanisz: Pair (path, method), because this will be used for all methods in all
     //          translation units.
     std::map<std::string, std::vector<ParsedMethod>> parsed_methods = {};
+    std::map<std::string, std::map<std::string, ParsedClass>> parsed_classes = {};
 
 public:
     std::map<std::string, std::vector<ParsedMethod>> get_parsed_methods() const
     {
         return std::move(parsed_methods);
+    }
+
+    std::map<std::string, std::map<std::string, ParsedClass>> get_parsed_classes() const
+    {
+        return std::move(parsed_classes);
     }
 
     virtual void run(const clang::ast_matchers::MatchFinder::MatchResult &Result) override
@@ -31,9 +38,17 @@ public:
                 && C->isDeleted() == false    // stanisz: Self explanatory
             )
             {
-
+                bool is_constructor = Result.Nodes.getNodeAs<clang::CXXConstructorDecl>("method") != NULL;
+                bool is_destructor = Result.Nodes.getNodeAs<clang::CXXDestructorDecl>("method") != NULL;
                 auto filename = source_manager.getFilename(C->getLocation()).str();
-                parsed_methods[filename].push_back(ParsedMethod(C));
+                parsed_methods[filename].push_back(ParsedMethod(C, is_constructor, is_destructor));
+
+                auto ClassDecl = C->getParent();
+                // stanisz: No class of this name yet
+                if (parsed_classes[filename].find(ClassDecl->getNameAsString()) == parsed_classes[filename].end())
+                {
+                    parsed_classes[filename][ClassDecl->getNameAsString()] = ParsedClass(ClassDecl);
+                }
             }
         }
     }
@@ -41,8 +56,6 @@ public:
 
 class FunctionPrinter : public clang::ast_matchers::MatchFinder::MatchCallback
 {
-    // stanisz: Pair (path, method), because this will be used for all methods in all
-    //          translation units.
     std::map<std::string, std::vector<ParsedFunction>> parsed_functions = {};
 
 public:
@@ -81,6 +94,11 @@ std::vector<ParsedFunction> ParsedInputSource::get_functions() const
     return this->functions;
 }
 
+std::map<std::string, ParsedClass> ParsedInputSource::get_classes() const
+{
+    return this->classes;
+}
+
 std::optional<std::vector<ParsedInputSource>> ClangUnitParser::parse(int argc, const char **argv)
 {
     static llvm::cl::OptionCategory option_category = llvm::cl::OptionCategory("ClangUnit parsing options");
@@ -101,14 +119,13 @@ std::optional<std::vector<ParsedInputSource>> ClangUnitParser::parse(int argc, c
     using namespace clang::ast_matchers;
     MatchFinder Finder;
     MethodPrinter MethodPrinter;
-    auto MethodMatcher = cxxMethodDecl(isExpansionInMainFile(), isUserProvided()).bind("method");
+    auto MethodMatcher = cxxMethodDecl(isExpansionInMainFile(), anyOf(isUserProvided(), cxxConstructorDecl(isDefaultConstructor()))).bind("method"); // =default is not user provided
     Finder.addMatcher(MethodMatcher, &MethodPrinter);
     llvm ::outs() << "INFO: MethodMatcher added.\n";
     FunctionPrinter FunctionPrinter;
     auto FunctionMatcher = functionDecl(isExpansionInMainFile()).bind("function");
     Finder.addMatcher(FunctionMatcher, &FunctionPrinter);
     llvm ::outs() << "INFO: FunctionMatcher added.\n";
-
     llvm::outs() << "INFO: Starting ClangTool.run()...\n";
     if (Tool.run(clang::tooling::newFrontendActionFactory(&Finder).get()) == 1)
     {
@@ -119,6 +136,7 @@ std::optional<std::vector<ParsedInputSource>> ClangUnitParser::parse(int argc, c
     std::vector<ParsedInputSource> parsed_input_sources = {};
     auto methods = MethodPrinter.get_parsed_methods();
     auto functions = FunctionPrinter.get_parsed_functions();
+    auto classes = MethodPrinter.get_parsed_classes();
 
     std::set<std::string> paths;
 
@@ -130,10 +148,14 @@ std::optional<std::vector<ParsedInputSource>> ClangUnitParser::parse(int argc, c
     {
         paths.insert(e.first);
     }
+    for (auto &&e : classes)
+    {
+        paths.insert(e.first);
+    }
 
     for (auto &&p : paths)
     {
-        ParsedInputSource pis(p, methods[p], functions[p]);
+        ParsedInputSource pis(p, methods[p], functions[p], classes[p]);
         parsed_input_sources.push_back(pis);
     }
 
@@ -155,5 +177,7 @@ void ParsedInputSource::print() const
     }
 }
 
-ParsedInputSource::ParsedInputSource(const std::string path, std::vector<ParsedMethod> &methods, std::vector<ParsedFunction> &functions)
-    : path(path), methods(methods), functions(functions) {}
+ParsedInputSource::ParsedInputSource(const std::string path, std::vector<ParsedMethod> &methods,
+                                     std::vector<ParsedFunction> &functions,
+                                     std::map<std::string, ParsedClass> &classes)
+    : path(path), methods(methods), functions(functions), classes(classes) {}

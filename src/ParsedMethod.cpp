@@ -1,6 +1,8 @@
 #include "ParsedMethod.hpp"
+#include <iostream>
 
-ParsedMethod::ParsedMethod(const clang::CXXMethodDecl *raw_method)
+ParsedMethod::ParsedMethod(const clang::CXXMethodDecl *raw_method,
+                           bool is_constructor, bool is_destructor)
 {
     this->name = raw_method->getNameAsString();
     this->return_type = raw_method->getReturnType().getAsString();
@@ -9,19 +11,21 @@ ParsedMethod::ParsedMethod(const clang::CXXMethodDecl *raw_method)
         this->parameters.push_back(FunctionalParameter(e));
     }
 
-    if (this->name.substr(0, 1) == "~")
-    {
-        this->kind = Kind::Destructor;
-    }
-    else if (this->name.compare(raw_method->getParent()->getNameAsString()) == 0)
+    if (is_constructor)
     {
         this->kind = Kind::Constructor;
+    }
+    else if (is_destructor)
+    {
+        this->kind = Kind::Destructor;
     }
     else
     {
         this->kind = Kind::RegularMethod;
     }
+
     this->class_name = raw_method->getParent()->getQualifiedNameAsString();
+    this->is_default = raw_method->isDefaulted();
 }
 
 std::string ParsedMethod::get_class_name() const
@@ -45,6 +49,11 @@ std::string ParsedMethod::get_return_type() const
 std::vector<FunctionalParameter> ParsedMethod::get_parameters() const
 {
     return this->parameters;
+}
+
+bool ParsedMethod::get_is_default() const
+{
+    return this->is_default;
 }
 
 void ParsedMethod::print() const

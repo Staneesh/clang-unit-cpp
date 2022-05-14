@@ -23,11 +23,12 @@ std::string ClangUnit::append_counter_to_test_name(const std::string &test_name)
     return test_name + std::to_string(STATIC_COUNTER++);
 }
 
-const TestCase ClangUnit::generate_test_for_method(const ParsedMethod &parsed_method) const
+const TestCase ClangUnit::generate_test_for_method(const ParsedMethod &parsed_method,
+                                                   const ParsedClass &parsed_class) const
 {
     std::string suite_name = this->get_test_suite_name();
     std::string test_name = this->get_method_test_case_name(parsed_method);
-    std::string body = this->get_method_test_case_body(parsed_method);
+    std::string body = this->get_method_test_case_body(parsed_method, parsed_class);
 
     return TestCase(suite_name, test_name, body);
 }
@@ -59,7 +60,10 @@ const TestCasesForParsedInput ClangUnit::generate_tests_for_parsed_input_source(
     for (auto &&method : parsed_input_source.get_methods())
     {
         if (method.get_kind() == ParsedMethod::Kind::RegularMethod)
-            result.push_back(this->generate_test_for_method(method));
+        {
+            auto cls = parsed_input_source.get_classes()[method.get_class_name()];
+            result.push_back(this->generate_test_for_method(method, cls));
+        }
     }
     for (auto &&function : parsed_input_source.get_functions())
     {
@@ -89,3 +93,4 @@ void ClangUnit::set_test_suite_name(const std::string &new_name)
 {
     this->test_suite_name = new_name;
 }
+

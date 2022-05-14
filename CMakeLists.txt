@@ -6,6 +6,7 @@ add_clang_executable(clang-unit
 	src/main.cpp 
 	src/ClangUnit.cpp 
 	src/ClangUnitChild.cpp 
+	src/ClangUnitCtor.cpp
 	src/interfaces/GeneratesIncludes.cpp
 	src/interfaces/HandlesOutputFiles.cpp
 	src/interfaces/Printable.cpp
@@ -15,6 +16,8 @@ add_clang_executable(clang-unit
 	src/InputParser.cpp
 	src/ParsedMethod.cpp
 	src/ParsedFunction.cpp
+	src/ParsedClass.cpp
+	src/ClassField.cpp
 	src/FunctionalParameter.cpp
 	src/TestCase.cpp
 	src/TestCasesForParsedInput.cpp

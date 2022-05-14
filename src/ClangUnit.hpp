@@ -32,12 +32,13 @@ private:
 protected:
     // stanisz: This is called by ClangUnit() constructor. If the user would like to change
     //          only test_suite_name, he could override this function without having to
-    //          override the function that usees get_test_suite_name() and invoking
+    //          override the function that uses get_test_suite_name() and invoking
     //          set_test_suite_name() beforehand.
     virtual const std::string get_default_test_suite_name() const;
 
     // stanisz: Returns a TestCase for a given parsed_method.
-    virtual const TestCase generate_test_for_method(const ParsedMethod &parsed_method) const;
+    virtual const TestCase generate_test_for_method(const ParsedMethod &parsed_method,
+                                                    const ParsedClass &parsed_class) const;
 
     // stanisz: Returns a TestCase for a given parsed_function.
     virtual const TestCase generate_test_for_function(const ParsedFunction &parsed_function) const;
