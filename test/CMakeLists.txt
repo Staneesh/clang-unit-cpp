@@ -20,7 +20,8 @@ add_executable(
   #cunit_test.cpp
   #cunit_demo1_filled.cpp
   #cunit_demo2_filled.cpp
-  cunit_demo4.cpp
+  #cunit_demo4.cpp
+  cunit_demo5_filled.cpp
 )
 target_link_libraries(
   test_executable
