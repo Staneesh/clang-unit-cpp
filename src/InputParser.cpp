@@ -41,7 +41,8 @@ public:
                 bool is_constructor = Result.Nodes.getNodeAs<clang::CXXConstructorDecl>("method") != NULL;
                 bool is_destructor = Result.Nodes.getNodeAs<clang::CXXDestructorDecl>("method") != NULL;
                 auto filename = source_manager.getFilename(C->getLocation()).str();
-                parsed_methods[filename].push_back(ParsedMethod(C, is_constructor, is_destructor));
+                auto PM = ParsedMethod(C, is_constructor, is_destructor);
+                parsed_methods[filename].push_back(PM);
 
                 auto ClassDecl = C->getParent();
                 // stanisz: No class of this name yet
@@ -49,6 +50,8 @@ public:
                 {
                     parsed_classes[filename][ClassDecl->getNameAsString()] = ParsedClass(ClassDecl);
                 }
+
+                parsed_classes[filename][ClassDecl->getNameAsString()].add_method(PM);
             }
         }
     }
@@ -119,7 +122,7 @@ std::optional<std::vector<ParsedInputSource>> ClangUnitParser::parse(int argc, c
     using namespace clang::ast_matchers;
     MatchFinder Finder;
     MethodPrinter MethodPrinter;
-    auto MethodMatcher = cxxMethodDecl(isExpansionInMainFile(), anyOf(isUserProvided(), cxxConstructorDecl(isDefaultConstructor()))).bind("method"); // =default is not user provided
+    auto MethodMatcher = cxxMethodDecl(unless(isPrivate()), isExpansionInMainFile(), anyOf(isUserProvided(), cxxConstructorDecl(isDefaultConstructor()))).bind("method"); // =default is not user provided
     Finder.addMatcher(MethodMatcher, &MethodPrinter);
     llvm ::outs() << "INFO: MethodMatcher added.\n";
     FunctionPrinter FunctionPrinter;

@@ -15,12 +15,15 @@ private:
     std::string name;
     std::string return_type;
     std::vector<FunctionalParameter> parameters;
+    bool is_templated;
 
 public:
     ParsedFunction(const clang::FunctionDecl *raw_function);
-    std::string get_name() const;
+    std::string get_name(std::string type = "") const;
     std::string get_return_type() const;
     std::vector<FunctionalParameter> get_parameters() const;
+    bool get_is_templated() const;
+
     void set_name(const std::string &name);
     void set_name(const std::string &&name);
     void set_return_type(const std::string &return_type);

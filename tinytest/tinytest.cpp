@@ -1,10 +1,9 @@
-class Object
+class A
 {
-    int name;
-    int age;
+    int m;
 
 public:
-    Object(){};
-    Object(int name_pass, int age_pass)
-        : name(name_pass), age(age_pass){};
+    template <typename T>
+    T getM() { return (T)this->m; }
+    A(int x) : m(x){};
 };

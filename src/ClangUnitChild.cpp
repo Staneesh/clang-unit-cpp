@@ -28,7 +28,7 @@ ClangUnitChild::get_method_test_case_body(
             {
                 std::string rvstr = RandomValueByType::random_value_string(field.get_type());
                 result += tabbing() + field.get_type() + " value = " + rvstr + end_of_line();
-                result += tabbing() + "instance." + method_call(parsed_method, {"value"}) + end_of_line();
+                result += tabbing() + "instance." + method_call(parsed_method, std::vector<std::string>({"value"}), "") + end_of_line();
                 std::string getten = "get" + field.get_declared_name() + "()";
                 getten[3] = std::toupper(getten[3]);
                 result += tabbing() + assert_eq("instance." + getten, "value");

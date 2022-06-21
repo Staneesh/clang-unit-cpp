@@ -1,22 +1,42 @@
-#include <gtest/gtest.h>														  //clang-unit: System library
+#include <gtest/gtest.h> //clang-unit: System library
 #include "/media/blk/HDD/llvm-project/clang-tools-extra/clang-unit/test/test.cpp" //clang-unit: User library
 
-TEST(SetterTesting, setSideSetterTest0)
+TEST(STUB_SUITE, SquareSTUB_TEST0)
 {
-	Square instance = Square();
-	float value = -2.520563;
-	instance.setSide(value);
-	ASSERT_EQ(instance.getSide(), value);
+	auto instance = Square();
+	//side;
+	ASSERT_EQ(/*Fill me!*/, /*Fill me!*/);
+	//area;
+	ASSERT_EQ(/*Fill me!*/, /*Fill me!*/);
+
 }
-TEST(ConstructorTesting, SquareConstructorTest1)
+TEST(STUB_SUITE, SquareSTUB_TEST1)
 {
-	Square instance = Square();
-	ASSERT_EQ(instance.getSide(), float());
-	ASSERT_EQ(instance.getArea(), float());
+	auto instance = Square((int)(-89383));
+	//side;
+	ASSERT_EQ(/*Fill me!*/, /*Fill me!*/);
+	//area;
+	ASSERT_EQ(/*Fill me!*/, /*Fill me!*/);
+
 }
-TEST(ConstructorTesting, SquareConstructorTest2)
+TEST(STUB_SUITE, setSideSTUB_TEST2)
 {
-	Square instance = Square((float)(-1.183149));
-	ASSERT_EQ(instance.getSide(), (float)(-1.183149));
-	ASSERT_EQ(instance.getArea(), (float)(-1.183149) * (float)(-1.183149));
+	Square instance; ;
+	instance.setSide((int)(-30886));
+	ASSERT_EQ(/*Fill me!*/, /*Fill me!*/);
+
+}
+TEST(STUB_SUITE, getAreaSTUB_TEST3)
+{
+	Square instance; ;
+	int result = instance.getArea();
+	ASSERT_EQ(result, /*Fill me!*/);
+
+}
+TEST(STUB_SUITE, getSideSTUB_TEST4)
+{
+	Square instance; ;
+	int result = instance.getSide();
+	ASSERT_EQ(result, /*Fill me!*/);
+
 }

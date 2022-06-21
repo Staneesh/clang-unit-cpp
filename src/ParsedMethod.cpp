@@ -26,6 +26,7 @@ ParsedMethod::ParsedMethod(const clang::CXXMethodDecl *raw_method,
 
     this->class_name = raw_method->getParent()->getQualifiedNameAsString();
     this->is_default = raw_method->isDefaulted();
+    this->is_templated = raw_method->isTemplated();
 }
 
 std::string ParsedMethod::get_class_name() const
@@ -38,9 +39,21 @@ ParsedMethod::Kind ParsedMethod::get_kind() const
     return this->kind;
 }
 
-std::string ParsedMethod::get_name() const
+std::string ParsedMethod::get_name(std::string type) const
 {
-    return this->name;
+    auto newname = this->name;
+    if (type.length() && get_is_templated())
+    {
+        if (newname.find('<') != std::string::npos)
+        {
+            newname = newname.substr(0, newname.find('<') + 1) + type + newname.substr(newname.find('>'), newname.length());
+        }
+        else
+        {
+            newname = newname + "<" + type + ">";
+        }
+    }
+    return newname;
 }
 std::string ParsedMethod::get_return_type() const
 {
@@ -54,6 +67,11 @@ std::vector<FunctionalParameter> ParsedMethod::get_parameters() const
 bool ParsedMethod::get_is_default() const
 {
     return this->is_default;
+}
+
+bool ParsedMethod::get_is_templated() const
+{
+    return this->is_templated;
 }
 
 void ParsedMethod::print() const

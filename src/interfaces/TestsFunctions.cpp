@@ -17,7 +17,7 @@ const std::string TestsFunctions::get_function_test_case_body(const ParsedFuncti
     }
     else
     {
-        result += function_call(parsed_function) + end_of_line();
+        result += tabbing() + function_call(parsed_function) + end_of_line();
         result += tabbing() + assert_eq(fill_me(), fill_me());
     }
 

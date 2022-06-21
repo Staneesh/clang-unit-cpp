@@ -1,17 +1,17 @@
 class Square
 {
-    float side;
-    float area;
+private:
+    int side;
+    int area;
 
 public:
     Square() = default;
-    Square(float side) { this->setSide(side); }
-
-    void setSide(float newSide)
+    Square(int s) { setSide(s); }
+    void setSide(int newSide)
     {
         this->side = newSide;
         this->area = this->side * this->side;
     }
-    float getArea() const { return this->area; }
-    float getSide() const { return this->side; }
+    int getArea() const { return this->area; }
+    int getSide() const { return this->side; }
 };

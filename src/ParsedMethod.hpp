@@ -25,15 +25,18 @@ private:
     Kind kind;
     std::string class_name;
     bool is_default;
+    bool is_templated;
 
 public:
     ParsedMethod(const clang::CXXMethodDecl *raw_method, bool is_constructor, bool is_destructor);
-    std::string get_name() const;
+    std::string get_name(std::string type = "") const;
     std::string get_return_type() const;
     std::vector<FunctionalParameter> get_parameters() const;
     Kind get_kind() const;
     std::string get_class_name() const;
     bool get_is_default() const;
+    bool get_is_templated() const;
+
     void set_name(const std::string &name);
     void set_name(const std::string &&name);
     void set_return_type(const std::string &return_type);

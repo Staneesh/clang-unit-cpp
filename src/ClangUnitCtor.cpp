@@ -47,7 +47,7 @@ ClangUnitCtor::generate_tests_for_parsed_input_source(
     for (auto &&method : parsed_input_source.get_methods())
     {
         bool testable =
-            method.get_kind() == ParsedMethod::Kind::Constructor;
+            method.get_kind() == ParsedMethod::Kind::Constructor && method.get_is_templated() == false;
         if (testable)
         {
             auto classes = parsed_input_source.get_classes();

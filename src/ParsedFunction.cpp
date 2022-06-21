@@ -8,11 +8,17 @@ ParsedFunction::ParsedFunction(const clang::FunctionDecl *raw_function)
     {
         this->parameters.push_back(FunctionalParameter(e));
     }
+    this->is_templated = raw_function->isTemplated();
 }
 
-std::string ParsedFunction::get_name() const
+std::string ParsedFunction::get_name(std::string type) const
 {
-    return this->name;
+    auto newname = this->name;
+    if (type.length() && get_is_templated())
+    {
+        newname = newname + "<" + type + ">";
+    }
+    return newname;
 }
 std::string ParsedFunction::get_return_type() const
 {
@@ -21,6 +27,11 @@ std::string ParsedFunction::get_return_type() const
 std::vector<FunctionalParameter> ParsedFunction::get_parameters() const
 {
     return this->parameters;
+}
+
+bool ParsedFunction::get_is_templated() const
+{
+    return this->is_templated;
 }
 
 void ParsedFunction::print() const

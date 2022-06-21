@@ -6,10 +6,10 @@
 #include "../ParsedMethod.hpp"
 #include "../ParsedFunction.hpp"
 
-std::string arguments_list(const std::vector<FunctionalParameter> &params);
-std::string method_call(const ParsedMethod &parsed_method);
-std::string method_call(const ParsedMethod &parsed_method, const std::vector<std::string> &args);
-std::string function_call(const ParsedFunction &parsed_function);
+std::string arguments_list(const std::vector<FunctionalParameter> &params, std::string type = "");
+std::string method_call(const ParsedMethod &parsed_method, std::string type = "");
+std::string method_call(const ParsedMethod &parsed_method, const std::vector<std::string> &args, std::string type = "");
+std::string function_call(const ParsedFunction &parsed_function, std::string type = "");
 
 // stanisz: Modifying generated test body's result.
 std::string end_of_line();

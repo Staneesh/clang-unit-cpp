@@ -1,6 +1,7 @@
 set(LLVM_LINK_COMPONENTS support)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_EXPORT_COMPILE_COMMANDS true)
 
 add_clang_executable(clang-unit 
 	src/main.cpp 
@@ -12,6 +13,7 @@ add_clang_executable(clang-unit
 	src/interfaces/Printable.cpp
 	src/interfaces/TestsMethods.cpp
 	src/interfaces/TestsFunctions.cpp
+	src/interfaces/TestsTemplates.cpp
 	src/interfaces/SharedGenericTestGen.cpp
 	src/InputParser.cpp
 	src/ParsedMethod.cpp
@@ -33,5 +35,6 @@ target_link_libraries(clang-unit
 	clangSerialization
 	clangTooling
 )
+
 
 target_compile_options(clang-unit PUBLIC -Wno-deprecated-enum-enum-conversion)

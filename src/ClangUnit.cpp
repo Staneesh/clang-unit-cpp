@@ -42,6 +42,37 @@ const TestCase ClangUnit::generate_test_for_function(const ParsedFunction &parse
     return TestCase(suite_name, test_name, body);
 }
 
+const std::vector<TestCase> ClangUnit::generate_tests_for_template_method(const ParsedMethod &parsed_method,
+                                                                          const ParsedClass &parsed_class) const
+{
+    std::string suite_name = this->get_test_suite_name();
+    std::string test_name = this->get_method_test_case_name(parsed_method);
+
+    std::vector<TestCase> result;
+    for (auto &&type : get_fundamental_types())
+    {
+        std::string body = this->get_template_method_test_case_body(parsed_method, parsed_class, type);
+        result.push_back(TestCase(suite_name, test_name, body));
+    }
+
+    return result;
+}
+
+const std::vector<TestCase> ClangUnit::generate_tests_for_template_function(const ParsedFunction &parsed_function) const
+{
+    std::string suite_name = this->get_test_suite_name();
+    std::string test_name = this->get_function_test_case_name(parsed_function);
+
+    std::vector<TestCase> result;
+    for (auto &&type : get_fundamental_types())
+    {
+        std::string body = this->get_template_function_test_case_body(parsed_function, type);
+        result.push_back(TestCase(suite_name, test_name, body));
+    }
+
+    return result;
+}
+
 const TestCasesForParsedInput ClangUnit::prepared_test_cases(const TestCasesForParsedInput &tcases) const
 {
     std::vector<TestCase> new_cases;
@@ -59,15 +90,39 @@ const TestCasesForParsedInput ClangUnit::generate_tests_for_parsed_input_source(
     std::vector<TestCase> result = {};
     for (auto &&method : parsed_input_source.get_methods())
     {
-        if (method.get_kind() == ParsedMethod::Kind::RegularMethod)
+        llvm::outs() << "Processing method with name " << method.get_name() << '\n';
+        if (true)
         {
             auto cls = parsed_input_source.get_classes()[method.get_class_name()];
-            result.push_back(this->generate_test_for_method(method, cls));
+            if (method.get_is_templated())
+            {
+                auto template_tests = this->generate_tests_for_template_method(method, cls);
+                result.insert(result.end(),
+                              template_tests.begin(),
+                              template_tests.end());
+            }
+            else
+            {
+                llvm::outs() << "DEBUG! Seeing non templated method and generating a test!" << method.get_name() << "\n";
+                result.push_back(this->generate_test_for_method(method, cls));
+            }
         }
     }
     for (auto &&function : parsed_input_source.get_functions())
     {
-        result.push_back(this->generate_test_for_function(function));
+        llvm::outs() << function.get_name() << ": " << function.get_is_templated() << "\n";
+        if (function.get_is_templated())
+        {
+            auto template_tests = this->generate_tests_for_template_function(function);
+            result.insert(result.end(),
+                          template_tests.begin(),
+                          template_tests.end());
+        }
+        else
+        {
+            llvm::outs() << "Processing f with name " << function.get_name() << '\n';
+            result.push_back(this->generate_test_for_function(function));
+        }
     }
     return TestCasesForParsedInput(parsed_input_source.get_path(), result);
 }
@@ -93,4 +148,3 @@ void ClangUnit::set_test_suite_name(const std::string &new_name)
 {
     this->test_suite_name = new_name;
 }
-

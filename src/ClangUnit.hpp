@@ -9,6 +9,7 @@
 #include "interfaces/HandlesOutputFiles.hpp"
 #include "interfaces/TestsMethods.hpp"
 #include "interfaces/TestsFunctions.hpp"
+#include "interfaces/TestsTemplates.hpp"
 
 #include "InputParser.hpp"
 #include "TestCasesForParsedInput.hpp"
@@ -16,7 +17,7 @@
 // stanisz: This class should be about constructing Tests (and possibly suites) based
 //          on the parsed input sources. The centralization mechanism will then
 //          aggregate all this and write to proper files.
-class ClangUnit : protected virtual TestsMethods, protected virtual TestsFunctions
+class ClangUnit : protected virtual TestsMethods, protected virtual TestsFunctions, protected virtual TestsTemplates
 {
 private:
     // stanisz: Members
@@ -42,6 +43,13 @@ protected:
 
     // stanisz: Returns a TestCase for a given parsed_function.
     virtual const TestCase generate_test_for_function(const ParsedFunction &parsed_function) const;
+
+    // stanisz: Returns TestCases for a given parsed_method.
+    virtual const std::vector<TestCase> generate_tests_for_template_method(const ParsedMethod &parsed_method,
+                                                                           const ParsedClass &parsed_class) const;
+
+    // stanisz: Returns TestCases for a given parsed_function.
+    virtual const std::vector<TestCase> generate_tests_for_template_function(const ParsedFunction &parsed_function) const;
 
     // stanisz: Returns TestCasesForParsedInput that represents a collection of test cases for a given
     //          parsed_input_source.
